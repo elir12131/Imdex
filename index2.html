@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Celebrations Chart</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3f3c3c;
+            /* Darker Grey */
+            --secondary-color: #b3d6f1;
+            /* Light Grey */
+            --text-color: #333;
+            --light-gray: #F8F8F8;
+            /* Very light grey background */
+            --white: #4fa3cd;
+            --shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            --border-radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 30px;
+            background-color: var(--light-grey);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chart-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 20px auto;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 3.2em;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #3f3c3c;
+            margin-bottom: 50px;
+            font-size: 1.2em;
+            font-weight: 400;
+        }
+
+        .months-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(280px, 1fr));
+            /* Explicitly set 4 columns */
+            gap: 30px;
+        }
+
+        /* Adjust for smaller screens to still be responsive */
+        @media (max-width: 1200px) {
+            .months-grid {
+                grid-template-columns: repeat(3, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 900px) {
+            .months-grid {
+                grid-template-columns: repeat(2, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .months-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        .month-card {
+            background-color: #b3d6f1;
+            border-radius: var(--border-radius);
+            padding: 25px 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .month-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .month-card h2 {
+            color: var(--primary-color);
+            font-size: 1.8em;
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 2px solid rgba(90, 90, 90, 0.2);
+            padding-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .month-card h3 {
+            /* Style for the Adar II sub-header */
+            color: var(--primary-color);
+            font-size: 1.8em;
+            /* Now same as h2 font-size */
+            margin-top: 20px;
+            margin-bottom: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(90, 90, 90, 0.3);
+            text-align: center;
+            font-weight: 600;
+            /* Match h2 font-weight */
+        }
+
+        .month-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .month-card li {
+            padding: 12px 0;
+            border-bottom: 1px dotted rgba(90, 90, 90, 0.1);
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .month-card li:last-child {
+            border-bottom: none;
+        }
+
+        .date {
+            font-weight: 600;
+            color: var(--primary-color);
+            width: 55px;
+            flex-shrink: 0;
+            text-align: right;
+            direction: ltr;
+            padding-top: 2px;
+            margin-right: 8px;
+        }
+
+        .date .hebrew-num {
+            direction: rtl;
+            unicode-bidi: embed;
+            display: inline-block;
+        }
+
+        .event-details {
+            flex-grow: 1;
+            overflow: hidden;
+            /* Contains the float */
+
+        }
+
+        .english-date {
+            font-size: 0.9em;
+            color: #777;
+            white-space: nowrap;
+            float: right;
+            margin-left: 8px;
+            padding-top: 2px;
+        }
+
+        .event-name-group {
+            display: flex;
+            align-items: center;
+            /* Aligns top of icon with top of first line of text */
+        }
+
+        .event-name-group.single-line {
+            align-items: center;
+        }
+
+
+        .icon {
+            font-size: 1.3em;
+            line-height: 1;
+            flex-shrink: 0;
+            margin-right: 6px;
+        }
+
+        .name {
+            line-height: 1.4;
+            overflow-wrap: break-word;
+        }
+
+        .name-secondary {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+
+        .birthday .icon {
+            color: #ff6347;
+            /* Tomato */
+        }
+
+        .anniversary .icon {
+            color: #4682B4;
+            /* SteelBlue */
+        }
+
+        .yohrtzeit .icon {
+            color: #555;
+            /* Darker gray for candle */
+        }
+
+
+        /* --- Yohrtzeits Section Styles --- */
+        .yohrtzeits-section {
+            grid-column: 1 / -1;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            padding: 25px 30px;
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .yohrtzeits-section h2 {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 2.2em;
+            margin-top: 0;
+            margin-bottom: 25px;
+            border-bottom: 2px solid rgba(90, 90, 90, 0.2);
+            padding-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .yohrtzeits-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px 30px;
+        }
+
+        .yohrtzeits-section li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            border-bottom: none;
+        }
+
+        .yohrtzeits-section .date {
+            width: 145px;
+        }
+
+        .yohrtzeits-section .date .hebrew-full-date {
+            direction: rtl;
+            unicode-bidi: embed;
+            display: inline-block;
+        }
+
+        .yohrtzeits-section .date .hebrew-full-date span.hebrew-month {
+            margin-left: 3px;
+        }
+
+        .yohrtzeits-section .icon {
+            display: none;
+        }
+
+
+        /* Print button styling */
+        .print-button-container {
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .print-button {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .print-button:hover {
+            background-color: #4A4A4A;
+        }
+
+
+        /* --- Print Styles --- */
+        @media print {
+            body {
+                background-color: var(--white) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .chart-container {
+                box-shadow: none;
+                border: 1px solid #ccc;
+                padding: 20px;
+            }
+
+            .month-card,
+            .yohrtzeits-section {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                background-color: var(--secondary-color) !important;
+            }
+
+            h1,
+            .subtitle,
+            .month-card h2,
+            .date,
+            .event-details,
+            .month-card h3,
+            .yohrtzeits-section h2 {
+                color: #000 !important;
+            }
+
+            .print-button-container {
+                display: none;
+            }
+
+            .months-grid {
+                grid-template-columns: repeat(4, 1fr) !important;
+                gap: 20px;
+            }
+
+            .yohrtzeits-section ul {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 10px 20px;
+            }
+
+            .chart-container {
+                padding: 10px;
+            }
+
+            .month-card,
+            .yohrtzeits-section {
+                padding: 15px 20px;
+            }
+
+            .month-card li,
+            .yohrtzeits-section li {
+                padding: 8px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chart-container">
+        <h1>Family Celebrations</h1>
+        <p class="subtitle">A Calendar of Birthdays, Anniversaries, and Yohrtzeits</p>
+
+        <div class="months-grid">
+            <script>
+                // Meticulously transcribed data from all provided handwritten screenshots.
+                // Each array: [Hebrew Month (Internal Key), Hebrew Day, Name, Event Type, English Date (MM/DD/YY or MM/DD/YYYY)]
+                const rawEventsData = [
+                        // Tishrei
+                        ["Tishrei", 5, "Rivky (Chanie)", "Birthday", "09/21/2012"],
+                        ["Tishrei", 17, "Zaidy Borsock", "Birthday", "10/19/1921"],
+                        ["Tishrei", 19, "Levi Schechter", "Birthday", "09/29/1980"],
+                        ["Tishrei", 19, "Henny", "Birthday", "10/21/1986"],
+                        ["Tishrei", 21, "Gisa (Shaindy)", "Birthday", "10/06/2012"],
+                        ["Tishrei", 27, "Shaya (Chavi)", "Birthday", "10/21/2014"],
+
+                        // Cheshvan
+                        ["Cheshvan", 7, "Shaindy", "Birthday", "11/07/1978"],
+                        ["Cheshvan", 9, "Gisa (Sara Malka)", "Birthday", "11/09/2016"],
+                        ["Cheshvan", 9, "Sarah (Gila)", "Birthday", "11/10/2016"],
+                        ["Cheshvan", 12, "Gisa", "Birthday", "10/17/1994"],
+                        ["Cheshvan", 13, "Matty", "Birthday", "11/03/2006"],
+                        ["Cheshvan", 15, "Levi Yanni", "Birthday", "11/16/1986"],
+                        ["Cheshvan", 15, "Leib", "Yortzheit", "10/30/2023"],
+                        ["Cheshvan", 17, "Zalman", "Birthday", "11/03/2009"], // CHANGED (was 11/03)
+                        ["Cheshvan", 26, "Gila", "Birthday", "11/02/1983"],
+                        ["Cheshvan", 28, "Mimi (Chanie)", "Birthday", "11/21/2014"],
+
+                        // Kislev
+                        
+                        ["Kislev", 1, "Yakov", "Birthday", "11/23/2014"],
+                        ["Kislev", 1, "Mindy", "Birthday", "11/22/2006"],
+                        ["Kislev", 4, "Bubby", "Birthday", "11/13/1950"],
+                        ["Kislev", 18, "Uncle Shimon", "Yohrtzeit", "11/29/1996"], // CHANGED (was Kislev 9)
+
+                        // Teves
+                        ["Teves", 6, "Chanie", "Birthday", "12/22/1982"],
+                        ["Teves", 8, "Yehuda(Chavi)", "Birthday", "01/03/2012"],
+                        ["Teves", 17, "Mendy", "Birthday", "12/25/2018"],
+
+                        // Shevat
+                        ["Shevat", 2, "Devora", "Birthday", "01/24/2023"],
+                        ["Shevat", 13, "Uncle Tony", "Yohrtzeit", "01/28/2010"],
+                        ["Shevat", 15, "Gila & Yossi", "Anniversary", "01/24/2005"],
+
+                        // Adar (Adar I & generic Adar)
+                        ["Adar", 9, "Jessica & Yudi", "Anniversary", "02/18/2024"],
+                        ["Adar", 24, "Leib", "Birthday", "02/25/1976"],
+
+                        // Adar II (explicit Adar II)
+                        ["Adar II", 1, "Shmuly Weinberg", "Birthday", "03/06/1992"],
+                        ["Adar II", 15, "Dovi", "Birthday", "03/25/2024"],
+                        ["Adar II", 17, "Abby", "Birthday", "03/17/2025"],
+                        ["Adar II", 14, "Sruly", "Birthday", "03/05/2015"],
+                        ["Adar II", 16, "Chavi", "Birthday", "03/20/1984"],
+                        ["Adar II", 19, "Bubby Borsock", "Yortzheit", "03/28/1997"], // CHANGED (was 04/19)
+                        ["Adar II", 22, "Zaidy", "Birthday", "03/30/1951"],
+
+                        // Nisan
+                        ["Nisan", 1, "Shaya (Sara Malka)", "Birthday", "03/14/2002"],
+                        ["Nisan", 17, "Mendel (Shaindy)", "Birthday", "04/02/2018"],
+                        ["Nisan", 24, "Zaidy Borsock", "Yohrtzeit", "04/19/1971"],
+                        ["Nisan", 24, "Elte Bubby Schechter", "Birthday", "04/1922"],
+
+                        // Iyar
+                        ["Iyar", 6, "Arele", "Birthday", "04/24/2007"],
+                        ["Iyar", 11, "Shimi", "Birthday", "05/15/2011"],
+                        ["Iyar", 18, "Shimon", "Birthday", "05/07/2015"],
+                        ["Iyar", 23, "Tzviki", "Birthday", "05/13/2004"],
+                        ["Iyar", 23, "Yehuda (Shaindy)", "Birthday", "05/21/2006"],
+                        ["Iyar", 27, "Yudi", "Birthday", "05/10/1991"],
+
+                        // Sivan
+                        ["Sivan", 1, "Gisa (Chanie)", "Birthday", "06/07/2016"],
+                        ["Sivan", 4, "Bubby Borsock", "Birthday", "05/25/1917"],
+                        ["Sivan", 11, "Miri", "Birthday", "06/01/2001"],
+                        ["Sivan", 11, "Bubby & Zaidy", "Anniversary", "06/09/1976"], // CHANGED (was 04/09)
+                        ["Sivan", 12, "Elte Zaidy Schechter", "Yortzheit", "06/05/1990"], // CHANGED (was 06/30)
+                        ["Sivan", 13, "Chanie & Levi", "Anniversary", "06/02/2004"],
+                        ["Sivan", 15, "Meish", "Birthday", "05/26/2021"],
+                        ["Sivan", 19, "Shaindy & Shmuly", "Anniversary", "06/22/2000"],
+                        ["Sivan", 19, "Mera", "Birthday", "06/22/2000"], // CHANGED (was 06/05)
+                        ["Sivan", 25, "Shmuly Reinetz", "Birthday", "06/30/1978"],
+                        ["Sivan", 26, "Sara Malka", "Birthday", "06/12/1977"], // CHANGED (was 06/22)
+                        ["Sivan", 29, "Jessica", "Birthday", "06/22/1990"], // CHANGED (was 07/06)
+                        ["Sivan", 30, "Gisa & Shmuly", "Anniversary", "07/06/2016"],
+
+                        // Tammuz
+                        ["Tammuz", 2, "Moshe", "Birthday", "06/14/2010"],
+                        ["Tammuz", 3, "Zaidy", "Yohrtzeit", "06/20/2015"],
+                        ["Tammuz", 7, "Simcha", "Birthday", "06/22/1988"],
+                        ["Tammuz", 9, "Yisroel", "Birthday", "07/12/2000"],
+                        ["Tammuz", 13, "Yossi", "Birthday", "07/04/1982"],
+                        ["Tammuz", 15, "Shloime", "Birthday", "06/27/2010"],
+                        ["Tammuz", 18, "Elisheva", "Birthday", "06/28/2021"],
+                        ["Tammuz", 20, "Baruch Mendel", "Birthday", "07/23/2019"],
+
+                        // Av
+                        ["Av", 2, "Uncle Tony", "Birthday", "07/11/1956"],
+                        ["Av", 7, "Uncle Shimon", "Birthday", "07/24/1958"],
+                        ["Av", 12, "Hillel", "Birthday", "08/04/1998"],
+                        ["Av", 24, "Rivky (Shaindy)", "Birthday", "08/22/2003"],
+                        ["Av", 25, "Yossi (Chanie)", "Birthday", "08/05/2010"],
+
+                        // Elul
+                        ["Elul", 2, "Shaya (Chanie)", "Birthday", "09/02/2008"],
+                        ["Elul", 2, "Zaidy Matlin", "Yohrtzeit", ], // CHANGED (was Elul 3), date UNCHANGED (null in list 2)
+                        ["Elul", 4, "Mera & Yisroel", "Anniversary", "08/21/2023"],
+                        ["Elul", 6, "Rivky & Hillel", "Anniversary", "08/23/2023"],
+                        ["Elul", 10, "Mimi (Gila)", "Birthday", "08/25/2007"],
+                        ["Elul", 11, "Chaim", "Birthday", "09/14/2005"],
+                        ["Elul", 12, "Aunty Annie", "Yortzheit", ], // UNCHANGED (null in list 2)
+                        ["Elul", 13, "Henny & Levi", "Anniversary", "09/02/2009"],
+                        ["Elul", 20, "Sara Malka & Leib", "Anniversary", "09/01/1999"],
+                        ["Elul", 22, "Sara(Shaindy)", "Birthday", "09/22/2008"], // CHANGED (was 09/23)
+                        ["Elul", 23, "Adina", "Birthday", "08/31/2021"],
+                    ];
+
+                const monthOrder = {
+                    "Tishrei": 1,
+                    "Cheshvan": 2,
+                    "Kislev": 3,
+                    "Teves": 4,
+                    "Shevat": 5,
+                    "Adar I": 6,   // Adar I and generic Adar will sort together
+                    "Adar": 6,     // Generic "Adar" entries now sort with Adar I
+                    "Adar II": 7,  // Adar II will sort after all Adar I/generic Adar entries
+                    "Nisan": 8,
+                    "Iyar": 9,
+                    "Sivan": 10,
+                    "Tammuz": 11,
+                    "Av": 12,
+                    "Elul": 13,
+                };
+
+                // All Adar types map to a single "Adar" card for display
+                const monthDisplayCardNames = {
+                    "Tishrei": 'Tishrei',
+                    "Cheshvan": 'Cheshvan',
+                    "Kislev": 'Kislev',
+                    "Teves": 'Teves',
+                    "Shevat": 'Shevat',
+                    "Adar I": 'Adar', // Now main Adar card is just "Adar"
+                    "Adar": 'Adar',
+                    "Adar II": 'Adar',
+                    "Nisan": 'Nisan',
+                    "Iyar": 'Iyar',
+                    "Sivan": 'Sivan',
+                    "Tammuz": 'Tammuz',
+                    "Av": 'Av',
+                    "Elul": 'Elul',
+                };
+
+                // Mapping for Hebrew month names (full spelling for Yahrtzeit section)
+                const hebrewMonthNamesFull = {
+                    "Tishrei": "×ª×©×¨×™",
+                    "Cheshvan": "×—×©×•×Ÿ",
+                    "Kislev": "×›×¡×œ×•",
+                    "Teves": "×˜×‘×ª",
+                    "Shevat": "×©×‘×˜",
+                    "Adar I": "××“×¨ ××³",
+                    "Adar": "××“×¨",      // For generic Adar entries
+                    "Adar II": "××“×¨ ×‘×³",
+                    "Nisan": "× ×™×¡×Ÿ",
+                    "Iyar": "××™×™×¨",
+                    "Sivan": "×¡×™×•×Ÿ",
+                    "Tammuz": "×ª×ž×•×–",
+                    "Av": "××‘",
+                    "Elul": "××œ×•×œ",
+                };
+
+                const typeIcons = {
+                    'Birthday': 'ðŸŽ‚',
+                    'Anniversary': 'ðŸ¥‚',
+                    'Yohrtzeit': 'ðŸ•¯ï¸',
+                    'Yortzheit': 'ðŸ•¯ï¸' // Also handle "Yortzheit" typo
+                };
+
+                // Mapping for Hebrew day numbers
+                const hebrewDays = {
+                    1: '××³', 2: '×‘×³', 3: '×’×³', 4: '×“×³', 5: '×”×³', 6: '×•×³', 7: '×–×³', 8: '×—×³', 9: '×˜×³', 10: '×™×³',
+                    11: '×™×´×', 12: '×™×´×‘', 13: '×™×´×’', 14: '×™×´×“', 15: '×˜×´×•',
+                    16: '×˜×´×–',
+                    17: '×™×´×–', 18: '×™×´×—', 19: '×™×´×˜', 20: '×›×³',
+                    21: '×›×´×', 22: '×›×´×‘', 23: '×›×´×’', 24: '×›×´×“', 25: '×›×´×”', 26: '×›×´×•', 27: '×›×´×–', 28: '×›×´×—', 29: '×›×´×˜', 30: '×œ×³'
+                };
+
+                // Function to get ONLY the Hebrew day number, for use in main grid
+                function getHebrewDayNumber(dayNum) {
+                    return hebrewDays[dayNum] || dayNum.toString();
+                }
+
+                // Function to format the date string for Yohrtzeit section (Hebrew Day + Hebrew Month + Colon)
+                function formatYahrtzeitDateEntry(dayNum, monthKey) {
+                    const hebrewDay = getHebrewDayNumber(dayNum); // e.g., '×˜×´×•'
+                    const hebrewMonth = hebrewMonthNamesFull[monthKey]; // e.g., '×—×©×•×Ÿ'
+                    // Combination: Hebrew day, space, Hebrew month (both RTL), then LTR colon
+                    return `<span class="hebrew-full-date"><span class="hebrew-num">${hebrewDay}</span> <span class="hebrew-month">${hebrewMonth}</span></span> :`;
+                }
+
+                const mainEvents = [];
+                const yohrtzeitEvents = [];
+
+                for (const row of rawEventsData) {
+                    let [month, day, name, type, englishDate] = row; // Now includes englishDate
+                    const eventData = {
+                        monthKey: month,
+                        monthNum: monthOrder[month],
+                        displayCardName: monthDisplayCardNames[month], // This is the English month name for the main card title
+                        day: parseInt(day, 10),
+                        name: name.trim(),
+                        type: type.trim(),
+                        englishDate: englishDate ? englishDate.trim() : null, // Store English date
+                    };
+
+                    // Check for Yortzheit/Yohrtzeit types
+                    if (eventData.type === 'Yohrtzeit' || eventData.type === 'Yortzheit') {
+                        yohrtzeitEvents.push(eventData);
+                    } else {
+                        mainEvents.push(eventData);
+                    }
+                }
+
+                // Sort main events: by numeric month order, then by day.
+                mainEvents.sort((a, b) => {
+                    if (a.monthNum !== b.monthNum) {
+                        return a.monthNum - b.monthNum;
+                    }
+                    return a.day - b.day;
+                });
+
+                // Sort yohrtzeit events: by numeric month order, then by day.
+                yohrtzeitEvents.sort((a, b) => {
+                    if (a.monthNum !== b.monthNum) {
+                        return a.monthNum - b.monthNum;
+                    }
+                    return a.day - b.day;
+                });
+
+                // Group main events by the main display card name (e.g., "Adar")
+                const groupedMainEvents = mainEvents.reduce((acc, event) => {
+                    if (!acc[event.displayCardName]) {
+                        acc[event.displayCardName] = [];
+                    }
+                    acc[event.displayCardName].push(event);
+                    return acc;
+                }, {});
+
+                // Generate HTML content for the main months grid
+                let monthsGridHtml = '';
+                const sortedDisplayCardNames = Object.keys(monthOrder)
+                    .map(key => monthDisplayCardNames[key])
+                    .filter((value, index, self) => self.indexOf(value) === index)
+                    .sort((a, b) => {
+                        const monthKeyA = Object.keys(monthOrder).find(k => monthDisplayCardNames[k] === a);
+                        const monthKeyB = Object.keys(monthOrder).find(k => monthDisplayCardNames[k] === b);
+                        return monthOrder[monthKeyA] - monthOrder[monthKeyB];
+                    });
+
+                sortedDisplayCardNames.forEach(monthName => {
+                    const eventsInCard = groupedMainEvents[monthName];
+                    if (!eventsInCard || eventsInCard.length === 0) {
+                        return; // Skip if no events for this month card (after Yahrtzeits removed)
+                    }
+
+                    monthsGridHtml += `
+                        <div class="month-card">
+                            <h2>${monthName}</h2>
+                            <ul>
+                    `;
+
+                    let hasPrintedAdarIIHeader = false;
+
+                    eventsInCard.forEach(event => {
+                        const iconHtml = `<span class="icon">${typeIcons[event.type]}</span>`;
+                        const hebrewDayNum = getHebrewDayNumber(event.day);
+                        const englishDateHtml = event.englishDate ? `<span class="english-date">${event.englishDate}</span>` : '';
+
+                        let nameHtml;
+                        let nameGroupClass = 'event-name-group';
+                        const nameMatch = event.name.match(/(.*?)\s*\((.*)\)/);
+
+                        if (nameMatch) {
+                            const mainName = nameMatch[1].trim();
+                            // MODIFIED: Replace space with non-breaking space to keep it on one line
+                            const secondaryText = nameMatch[2].trim().replace(/ /g, 'Â ');
+                            const secondaryName = `(${secondaryText})`;
+                            nameHtml = `<span class="name">${mainName}<br><span class="name-secondary">${secondaryName}</span></span>`;
+                        } else {
+                            nameHtml = `<span class="name">${event.name}</span>`;
+                            nameGroupClass += ' single-line';
+                        }
+
+                        if (monthName === 'Adar' && event.monthNum === monthOrder['Adar II'] && !hasPrintedAdarIIHeader) {
+                            monthsGridHtml += `<h3>Adar II</h3>`;
+                            hasPrintedAdarIIHeader = true;
+                        }
+
+                        monthsGridHtml += `
+                                <li class="${event.type.toLowerCase()}">
+                                    <span class="date"><span class="hebrew-num">${hebrewDayNum}</span> :</span>
+                                    <div class="event-details">
+                                        ${englishDateHtml}
+                                        <div class="${nameGroupClass}">
+                                            ${iconHtml}
+                                            ${nameHtml}
+                                        </div>
+                                    </div>
+                                </li>
+                        `;
+                    });
+                    monthsGridHtml += `
+                            </ul>
+                        </div>
+                    `;
+                });
+                document.querySelector('.months-grid').innerHTML = monthsGridHtml;
+
+                // Generate HTML for the Yohrtzeits section
+                let yohrtzeitSectionHtml = '';
+                if (yohrtzeitEvents.length > 0) {
+                    yohrtzeitSectionHtml += `
+                        <div class="yohrtzeits-section">
+                            <h2>Yahrtzeits</h2>
+                            <ul>
+                    `;
+                    yohrtzeitEvents.forEach(event => {
+                        const yahrtzeitDateString = formatYahrtzeitDateEntry(event.day, event.monthKey);
+                        const englishDateHtml = event.englishDate ? `<span class="english-date">${event.englishDate}</span>` : '';
+
+                        let nameHtml;
+                        let nameGroupClass = 'event-name-group';
+                        const nameMatch = event.name.match(/(.*?)\s*\((.*)\)/);
+
+                        if (nameMatch) {
+                            const mainName = nameMatch[1].trim();
+                            const secondaryText = nameMatch[2].trim().replace(/ /g, 'Â ');
+                            const secondaryName = `(${secondaryText})`;
+                            nameHtml = `<span class="name">${mainName}<br><span class="name-secondary">${secondaryName}</span></span>`;
+                        } else {
+                            nameHtml = `<span class="name">${event.name}</span>`;
+                            nameGroupClass += ' single-line';
+                        }
+
+
+                        yohrtzeitSectionHtml += `
+                                <li>
+                                    <span class="date">${yahrtzeitDateString}</span>
+                                    <div class="event-details">
+                                        ${englishDateHtml}
+                                         <div class="${nameGroupClass}">
+                                            ${nameHtml}
+                                        </div>
+                                    </div>
+                                </li>
+                        `;
+                    });
+                    yohrtzeitSectionHtml += `
+                            </ul>
+                        </div>
+                    `;
+                }
+                document.querySelector('.chart-container').insertAdjacentHTML('beforeend', yohrtzeitSectionHtml);
+
+            </script>
+        </div>
+
+        <div class="print-button-container">
+            <button class="print-button" onclick="window.print()">Print to PDF</button>
+        </div>
+
+    </div>
+</body>
+
+</html>
